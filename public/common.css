@@ -15,5 +15,25 @@ html {
     color: #f56c6c;
 }
 .el-menu {
-border: none !important;
+    border: none !important;
+}
+.el-submenu .el-menu-item{
+    background: #1f2d3d !important;
+}
+.el-submenu .el-menu-item:hover {
+    background-color: #001528 !important;
+}
+.slide-fade-enter-active {
+    transition: all .4s ease;
+}
+.slide-fade-leave-active {
+    display: none;
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateX(20px);
+    opacity: 0;
+}
+.el-breadcrumb{
+    display: inline-block;
 }

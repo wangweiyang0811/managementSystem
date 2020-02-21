@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { session } from "../tool/Storage.js";
 
 Vue.use(Vuex);
-
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     userinfo: {
       name: null,
@@ -13,6 +13,7 @@ export default new Vuex.Store({
   mutations: {
     setUserinfo(state, val) {
       state.userinfo = val;
+      session.set("userinfo", val);
     }
   },
   actions: {
@@ -22,3 +23,10 @@ export default new Vuex.Store({
   },
   modules: {}
 });
+
+let userinfo = session.get("userinfo");
+if (userinfo) {
+  store.dispatch("setUserinfo", userinfo);
+}
+
+export default store;

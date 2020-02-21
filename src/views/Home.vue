@@ -3,7 +3,7 @@
     <el-container>
       <el-aside width="200px">
         <h2 class="h2">库存管理系统</h2>
-        <NavMenu></NavMenu>
+        <Sidebar :list="routerData" />
       </el-aside>
       <el-container>
         <el-header>
@@ -17,27 +17,38 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-header>
-        <el-main></el-main>
+        <el-main>
+          <transition name="slide-fade">
+            <keep-alive>
+              <router-view v-if="$route.meta.keepAlive" />
+            </keep-alive>
+          </transition>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
 import { getToken } from "@/request/api.js";
-import NavMenu from "@/components/NavMenu.vue";
+import Sidebar from "@/components/sidebar/Sidebar.vue";
 export default {
   name: "Home",
   components: {
-    // HelloWorld
-    NavMenu
+    Sidebar
   },
   data() {
     return {
-      list: [1111, 2222, 3333, 4444, 5555, 6666]
+      routerData: []
     };
+  },
+  created() {
+    getToken().then(res => {
+      console.log(res);
+    });
+  },
+  mounted() {
+    this.routerData = this.$router.options.routes;
   },
   methods: {
     handleCommand(command) {
@@ -51,11 +62,6 @@ export default {
       this.$store.dispatch("setUserinfo", { token: null, name: null });
       this.$router.push("/login");
     }
-  },
-  created() {
-    getToken().then(res => {
-      console.log(res);
-    });
   }
 };
 </script>

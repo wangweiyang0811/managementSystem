@@ -5,23 +5,7 @@
     </transition>
   </div>
 </template>
-<script>
-export default {
-  components: {
-    // HelloWorld
-  },
-  data() {
-    return {
-      content: "This is home!"
-    };
-  },
-  methods: {
-    click() {
-      console.log(0);
-    }
-  }
-};
-</script>
+
 <style lang="scss" scoped>
 #app {
   width: 100%;

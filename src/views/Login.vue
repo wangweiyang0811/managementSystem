@@ -1,5 +1,5 @@
 <template>
-  <div class="login-page">
+  <div class="login-page" @keyup.enter="login">
     <div class="login-box">
       <h3>库存管理系统</h3>
       <el-input
@@ -57,7 +57,6 @@ export default {
         let userinfo = this.$store.state.userinfo;
         userinfo = { token: "abc", name: this.userName.value };
         this.$store.dispatch("setUserinfo", userinfo);
-        console.log(this.$store.state);
         this.$router.push({ path: "/" });
       }
     },
