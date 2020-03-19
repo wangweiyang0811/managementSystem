@@ -1,19 +1,18 @@
 <template>
   <div>
-    <Table :data="tableData" :header="header" />
+    <Table :data="tableData" :header="header" :loading="loading" />
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :page-sizes="[10, 20]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length"
+      :page-size="size"
+      layout="total, prev, pager, next, jumper"
+      :total="count"
     ></el-pagination>
   </div>
 </template>
 
 <script>
 import Table from "@/components/Table.vue";
+import { getLoginInfo } from "@/request/api";
 export default {
   components: {
     Table
@@ -21,49 +20,55 @@ export default {
   props: {},
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03 02:05:60",
-          username: "admin",
-          ip: "******************"
-        },
-        {
-          date: "2016-05-03",
-          username: "admin",
-          ip: "******************"
-        }
-      ],
+      size: 15,
+      page: 1,
+      tableData: [],
+      count: 0,
+      loading: false,
       header: [
-        {
-          prop: "date",
-          label: "时间",
-          width: "170"
-        },
         {
           prop: "username",
           label: "用户名",
-          width: "180"
+          width: "150"
+        },
+        {
+          prop: "createdAt",
+          label: "登录时间",
+          width: "170"
         },
         {
           prop: "ip",
-          label: "IP地址"
+          label: "IP",
+          width: "150"
+        },
+        {
+          prop: "area",
+          label: "城市"
         }
       ]
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getInfo();
+  },
   methods: {
-    handleSizeChange(val) {
-      console.log(val);
-    },
     handleCurrentChange(val) {
-      console.log(val);
+      this.page = val;
+      this.getInfo();
+    },
+    async getInfo() {
+      this.loading = true;
+      let res = await getLoginInfo({
+        limit: this.size,
+        offset: this.page
+      });
+      this.tableData = res.data;
+      this.count = res.count;
+      this.loading = false;
     }
   },
   computed: {},
   watch: {}
 };
 </script>
-<style lang="scss" scoped>
-</style>

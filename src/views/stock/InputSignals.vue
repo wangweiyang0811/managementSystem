@@ -2,18 +2,17 @@
   <div>
     <Table :data="tableData" :header="header" />
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :page-sizes="[10, 20]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length"
+      :page-size="size"
+      layout="total, prev, pager, next, jumper"
+      :total="count"
     ></el-pagination>
   </div>
 </template>
 
 <script>
 import Table from "@/components/Table.vue";
+import { getInput } from "@/request/api";
 export default {
   components: {
     Table
@@ -21,19 +20,13 @@ export default {
   props: {},
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          category: "水果",
-          name: "苹果",
-          num: "100",
-          supplier: "王哥",
-          operator: "admin"
-        }
-      ],
+      page: 1,
+      size: 15,
+      count: 0,
+      tableData: [],
       header: [
         {
-          prop: "date",
+          prop: "createdAt",
           label: "入库时间",
           width: "170"
         },
@@ -53,6 +46,11 @@ export default {
           width: "170"
         },
         {
+          prop: "house",
+          label: "仓库名",
+          width: "170"
+        },
+        {
           prop: "supplier",
           label: "供应商",
           width: "170"
@@ -65,13 +63,23 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getData();
+  },
   methods: {
-    handleSizeChange(val) {
-      console.log(val);
-    },
     handleCurrentChange(val) {
       console.log(val);
+    },
+    getData() {
+      getInput({
+        offset: this.page,
+        limit: this.size
+      }).then(res => {
+        if (res.code == 200) {
+          this.tableData = res.data;
+          this.count = res.count;
+        }
+      });
     }
   },
   computed: {},

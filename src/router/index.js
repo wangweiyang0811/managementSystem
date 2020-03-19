@@ -22,8 +22,7 @@ NProgress.configure({
   minimum: 0.1 // 初始化时的最小百分比
 });
 
-const routes = [
-  {
+const routes = [{
     path: "/",
     name: "Home",
     component: Home,
@@ -38,36 +37,32 @@ const routes = [
   {
     path: "/ware",
     component: Home,
-    children: [
-      {
-        path: "/warehouse",
-        component: Warehouse,
-        name: "Warehouse",
-        hidden: false,
-        meta: {
-          title: "仓库管理",
-          icon: "el-icon-menu",
-          keepAlive: true
-        }
+    children: [{
+      path: "/warehouse",
+      component: Warehouse,
+      name: "Warehouse",
+      hidden: false,
+      meta: {
+        title: "仓库管理",
+        icon: "el-icon-menu",
+        keepAlive: true
       }
-    ]
+    }]
   },
   {
     path: "/sup",
     component: Home,
-    children: [
-      {
-        path: "/supplier",
-        name: "Supplier",
-        component: Supplier,
-        hidden: false,
-        meta: {
-          title: "供应商管理",
-          icon: "el-icon-menu",
-          keepAlive: true
-        }
+    children: [{
+      path: "/supplier",
+      name: "Supplier",
+      component: Supplier,
+      hidden: false,
+      meta: {
+        title: "供应商管理",
+        icon: "el-icon-menu",
+        keepAlive: true
       }
-    ]
+    }]
   },
   {
     path: "/login",
@@ -102,11 +97,12 @@ const router = new VueRouter({
   routes
 });
 router.beforeEach((to, from, next) => {
-  from;
   NProgress.start();
+  if (hasOwnProperty.call(to, "meta") && to.meta.title) {
+    store.dispatch("setPageTitle", to.meta.title);
+  }
   if (to.name !== "Login") {
-    from;
-    if (!store.state.userinfo.token) {
+    if (!store.state.userinfo.username) {
       next("/login");
       NProgress.done();
       return;

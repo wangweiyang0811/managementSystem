@@ -21,19 +21,13 @@
         :suffix-icon="passWordUseable"
         title="密码格式为数字、字母、下划线，5到12位"
       ></el-input>
-      <el-button
-        @click="login"
-        :disabled="disabled"
-        type="primary"
-        title="登录"
-      >
-        登录
-      </el-button>
+      <el-button @click="login" :disabled="disabled" type="primary" title="登录">登录</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import { login, setLoginInfo } from "@/request/api.js";
 export default {
   data() {
     return {
@@ -52,13 +46,32 @@ export default {
     this.$refs.myInput.focus();
   },
   methods: {
-    login() {
+    async login() {
       if (this.canLogIn()) {
-        let userinfo = this.$store.state.userinfo;
-        userinfo = { token: "abc", name: this.userName.value };
-        this.$store.dispatch("setUserinfo", userinfo);
-        this.$router.push({ path: "/" });
+        let res = await login({
+          username: this.userName.value,
+          password: this.passWord.value
+        });
+        if (res.code == 200) {
+          this.$store.dispatch("setUserinfo", res.data);
+          this.$store.dispatch("setToken", res.token);
+          await this.setLogin();
+          this.$router.push({ path: "/" });
+        }
       }
+    },
+    async setLogin() {
+      let ip = sessionStorage.getItem("ip");
+      let area = sessionStorage.getItem("area");
+      let state = await setLoginInfo({
+        username: this.userName.value,
+        ip,
+        area
+      });
+      if (state) {
+        return true;
+      }
+      return false;
     },
     userNameChange(value) {
       const reg = /^\w{5,12}$/gi;

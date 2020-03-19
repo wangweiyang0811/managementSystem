@@ -37,3 +37,12 @@ html {
 .el-breadcrumb{
     display: inline-block;
 }
+.el-form{
+    width: 500px;
+}
+.el-row{
+    margin-bottom:20px ;
+}
+#app .el-dialog {
+    width: 600px;
+}

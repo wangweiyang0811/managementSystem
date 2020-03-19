@@ -9,7 +9,7 @@
         <el-header>
           <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
-              {{ $store.state.userinfo.name }}
+              {{ $store.state.userinfo.username }}
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
@@ -18,6 +18,7 @@
           </el-dropdown>
         </el-header>
         <el-main>
+          <div id="pageTitle">{{ $store.state.pageTitle }}</div>
           <transition name="slide-fade">
             <keep-alive>
               <router-view v-if="$route.meta.keepAlive" />
@@ -30,7 +31,6 @@
 </template>
 
 <script>
-import { getToken } from "@/request/api.js";
 import Sidebar from "@/components/sidebar/Sidebar.vue";
 export default {
   name: "Home",
@@ -41,11 +41,6 @@ export default {
     return {
       routerData: []
     };
-  },
-  created() {
-    getToken().then(res => {
-      console.log(res);
-    });
   },
   mounted() {
     this.routerData = this.$router.options.routes;
@@ -59,7 +54,7 @@ export default {
       }
     },
     logOut() {
-      this.$store.dispatch("setUserinfo", { token: null, name: null });
+      this.$store.dispatch("setUserinfo", { name: null });
       this.$router.push("/login");
     }
   }
@@ -90,8 +85,22 @@ export default {
 .el-dropdown-link {
   cursor: pointer;
   color: #409eff;
+  transition: all 0.3s;
+  &:hover {
+    filter: brightness(1.5);
+  }
 }
 .el-icon-arrow-down {
   font-size: 15px;
+}
+#pageTitle{
+  height: 40px;
+  line-height: 40px;
+  padding-left: 30px;
+  border-radius: 10px;
+  color: #666;
+  font-weight: 600;
+  box-shadow: 0 2px 6px 0 #d2d2d2;
+  margin-bottom: 20px;
 }
 </style>

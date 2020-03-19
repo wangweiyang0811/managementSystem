@@ -1,13 +1,16 @@
 <template>
   <div>
+    <el-row>
+      <el-button type="primary" @click="input">商品入库</el-button>
+      <el-button type="primary" @click="output">商品出库</el-button>
+      <el-button type="primary" @click="tohouse">仓库转</el-button>
+    </el-row>
     <Table :data="tableData" :header="header" />
     <el-pagination
-      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :page-sizes="[10, 20]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="tableData.length"
+      :page-size="size"
+      layout="total, prev, pager, next, jumper"
+      :total="count"
     ></el-pagination>
   </div>
 </template>
@@ -21,6 +24,9 @@ export default {
   props: {},
   data() {
     return {
+      page: 1,
+      size: 15,
+      count: 0,
       tableData: [
         {
           id: "555",
@@ -55,11 +61,17 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    handleSizeChange(val) {
-      console.log(val);
-    },
     handleCurrentChange(val) {
       console.log(val);
+    },
+    input() {
+      console.log("rk");
+    },
+    output() {
+      console.log("ck");
+    },
+    tohouse() {
+      console.log("tt");
     }
   },
   computed: {},

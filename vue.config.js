@@ -4,7 +4,7 @@ module.exports = {
     proxy: {
       //配置跨域
       "/api": {
-        target: "https://www.sunnyyang.top:9999/api",
+        target: "http://localhost:9000/",
         ws: true,
         changOrigin: true,
         pathRewrite: {
