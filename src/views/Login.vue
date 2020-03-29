@@ -118,13 +118,10 @@ export default {
   background-size: cover;
   .login-box {
     width: 400px;
-    padding: 20px 0px;
-    transform: translateY(-4vw);
+    padding: 15px 0px;
     box-sizing: border-box;
     margin: auto;
     background: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 0 10px 0 #aaa;
-    border-radius: 20px;
     h3 {
       text-align: center;
       font-size: 28px;

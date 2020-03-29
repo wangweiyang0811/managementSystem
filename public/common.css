@@ -16,13 +16,27 @@ html {
 }
 .el-menu {
     border: none !important;
+    background-color: #304156 !important;
 }
-.el-submenu .el-menu-item{
+.el-menu .el-menu-item{
+    color:#fff !important;
+}
+.el-menu .el-menu-item.is-active{
+    color: aquamarine !important;
+    background-color: #bb4d0d !important;
+}
+
+.el-menu .el-menu-item:hover{
+    background-color: #2f4c70;
+}
+.el-menu .el-submenu .el-menu-item{
     background: #1f2d3d !important;
+
 }
-.el-submenu .el-menu-item:hover {
+.el-menu .el-submenu .el-menu-item:hover {
     background-color: #001528 !important;
 }
+
 .slide-fade-enter-active {
     transition: all .4s ease;
 }

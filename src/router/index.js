@@ -7,10 +7,13 @@ import "nprogress/nprogress.css";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import NotFound from "../views/404.vue";
+import Fn from "@/views/Fn.vue";
 import StockRouter from "./stock.js";
 import UserRouter from "./user.js";
 import Warehouse from "@/views/warehouse/Warehouse.vue";
 import Supplier from "@/views/supplier/Supplier.vue";
+import Chart from "@/views/Chart.vue";
+import bus from "../bus";
 
 Vue.use(VueRouter);
 // 个性化配置进度条外观
@@ -25,15 +28,52 @@ NProgress.configure({
 const routes = [{
     path: "/",
     name: "Home",
+    redirect: "/fn",
     component: Home,
-    hidden: false,
+    hidden: true,
     meta: {
       title: "首页",
       icon: "el-icon-menu"
     }
   },
-  StockRouter,
-  UserRouter,
+  {
+    path: "/fn",
+    name: "Fn",
+    component: Home,
+    hidden: false,
+    meta: {
+      title: "首页",
+      icon: "el-icon-menu"
+    },
+    children: [{
+      path: "/function",
+      component: Fn,
+      name: "Function",
+      hidden: false,
+      meta: {
+        title: "首页",
+        icon: "el-icon-menu",
+        keepAlive: true
+      }
+    }]
+  },
+  {
+    path: "/chart",
+    component: Home,
+    children: [{
+      path: "/charts",
+      component: Chart,
+      name: "Charts",
+      hidden: false,
+      meta: {
+        title: "统计图表",
+        icon: "el-icon-menu",
+        keepAlive: true
+      }
+    }]
+  },
+  ...StockRouter,
+  ...UserRouter,
   {
     path: "/ware",
     component: Home,
@@ -98,6 +138,7 @@ const router = new VueRouter({
 });
 router.beforeEach((to, from, next) => {
   NProgress.start();
+  bus.$emit("router",to.path);
   if (hasOwnProperty.call(to, "meta") && to.meta.title) {
     store.dispatch("setPageTitle", to.meta.title);
   }
