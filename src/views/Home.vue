@@ -69,8 +69,9 @@ export default {
   box-shadow: 0 1px 3px 0 #999;
 }
 .el-aside {
-  width: 80px;
-  height: 100vh;
+  width: 100px;
+  height: 100%;
+  min-height: 100vh;
   background: rgb(48, 65, 86);
   color: rgb(191, 203, 217);
   .h2 {
