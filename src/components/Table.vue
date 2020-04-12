@@ -1,7 +1,7 @@
 <template>
   <el-table :data="data" border style="width: 100%" size="small" v-loading="loading">
     <template v-for="item in header">
-      <el-table-column label="操作" v-if="item.prop == 'operation'" :key="item.index">
+      <el-table-column label="操作" v-if="item.prop == 'operation'" :width="item.width" :key="item.index">
         <template slot-scope="scope" v-if="show(item, scope)">
           <el-button
             v-for="el in item.list"
@@ -70,3 +70,10 @@ export default {
   watch: {}
 };
 </script>
+<style lang="scss" scoped>
+.el-table__body {
+  .el-button--mini, .el-button--mini.is-round {
+    margin-bottom: 2px;
+  }
+}
+</style>

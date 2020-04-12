@@ -71,6 +71,9 @@ export function getHouse(data) {
     params: data
   });
 }
+export function getAllHouse() {
+  return axios.get("/api/house/all");
+}
 
 // supplierinfo
 export function creatSupplier(data) {
@@ -88,6 +91,10 @@ export function getSupplier(data) {
   return axios.get("/api/supplier", {
     params: data
   });
+}
+
+export function getAllSupplier() {
+  return axios.get("/api/supplier/all");
 }
 
 // input
@@ -116,6 +123,23 @@ export function deleteOutput(data) {
 }
 export function getOutput(data) {
   return axios.get("/api/output", {
+    params: data
+  });
+}
+// stock
+export function creatStock(data) {
+  return axios.post("/api/stock", data);
+}
+export function zhStock(data) {
+  return axios.post("/api/stock/zh", data);
+}
+export function deleteStock(data) {
+  return axios.delete("/api/stock", {
+    params: data
+  });
+}
+export function getStock(data) {
+  return axios.get("/api/stock", {
     params: data
   });
 }

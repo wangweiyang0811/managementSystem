@@ -28,7 +28,7 @@ NProgress.configure({
 const routes = [{
     path: "/",
     name: "Home",
-    redirect: "/fn",
+    redirect: "/function",
     component: Home,
     hidden: true,
     meta: {
@@ -57,6 +57,7 @@ const routes = [{
       }
     }]
   },
+  ...StockRouter,
   {
     path: "/chart",
     component: Home,
@@ -72,8 +73,6 @@ const routes = [{
       }
     }]
   },
-  ...StockRouter,
-  ...UserRouter,
   {
     path: "/ware",
     component: Home,
@@ -103,7 +102,9 @@ const routes = [{
         keepAlive: true
       }
     }]
-  },
+  }
+  ,
+  ...UserRouter,
   {
     path: "/login",
     name: "Login",
@@ -138,7 +139,7 @@ const router = new VueRouter({
 });
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  bus.$emit("router",to.path);
+  bus.$emit("router", to.path);
   if (hasOwnProperty.call(to, "meta") && to.meta.title) {
     store.dispatch("setPageTitle", to.meta.title);
   }

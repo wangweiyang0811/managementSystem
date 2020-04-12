@@ -3,7 +3,7 @@
     <template v-if="hasOneShowChild(item.children) && !onlyChild.children">
       <el-menu-item :index="onlyChild.path">
         <template slot="title">
-          <i :class="onlyChild.meta.icon"></i>
+          <!-- <i :class="onlyChild.meta.icon"></i> -->
           <span>{{ onlyChild.meta.title }}</span>
         </template>
       </el-menu-item>
@@ -12,7 +12,7 @@
     <template v-else>
       <el-submenu :index="item.path">
         <template slot="title">
-          <i :class="item.meta.icon"></i>
+          <!-- <i :class="item.meta.icon"></i> -->
           <span>{{ item.meta.title }}</span>
         </template>
 

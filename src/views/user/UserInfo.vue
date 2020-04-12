@@ -52,18 +52,15 @@ export default {
       header: [
         {
           prop: "username",
-          label: "账号",
-          width: "180"
+          label: "账号"
         },
         {
           prop: "use",
-          label: "是否可用",
-          width: "180"
+          label: "是否可用"
         },
         {
           prop: "permissions",
-          label: "权限",
-          width: "180"
+          label: "权限"
         },
         {
           prop: "operation",
@@ -103,6 +100,9 @@ export default {
   created() {},
   mounted() {
     this.getInfo();
+    if(this.$store.state.userinfo.permissions === "管理员"){
+      this.header.pop();
+    }
   },
   methods: {
     handleCurrentChange(val) {

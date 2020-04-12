@@ -20,6 +20,7 @@ html {
 }
 .el-menu .el-menu-item{
     color:#fff !important;
+    padding-left: 50px !important;
 }
 .el-menu .el-menu-item.is-active{
     color: aquamarine !important;

@@ -20,9 +20,10 @@
         <el-main>
           <div id="pageTitle">{{ $store.state.pageTitle }}</div>
           <transition name="slide-fade">
-            <keep-alive>
-              <router-view v-if="$route.meta.keepAlive" />
-            </keep-alive>
+            <!-- <keep-alive> -->
+            <!-- <router-view v-if="$route.meta.keepAlive" /> -->
+            <router-view />
+            <!-- </keep-alive> -->
           </transition>
         </el-main>
       </el-container>

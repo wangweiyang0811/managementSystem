@@ -31,13 +31,13 @@ export default {
           width: "170"
         },
         {
-          prop: "category",
-          label: "商品类别",
+          prop: "name",
+          label: "商品名称",
           width: "170"
         },
         {
-          prop: "name",
-          label: "商品名称",
+          prop: "type",
+          label: "类型",
           width: "170"
         },
         {

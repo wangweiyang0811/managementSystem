@@ -1,11 +1,50 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" @click="input">商品入库</el-button>
-      <el-button type="primary" @click="output">商品出库</el-button>
-      <el-button type="primary" @click="tohouse">仓库转</el-button>
+      <el-button type="primary" @click="create(undefined)">新建商品</el-button>
     </el-row>
-    <Table :data="tableData" :header="header" />
+    <Model :visible="showModel" @close="close" :title="types.get(operationType)">
+      <el-form ref="ruleForm" :model="goods" :rules="rules" label-width="80px" show-message>
+        <el-form-item label="商品名" required prop="name">
+          <el-input v-model="goods.name" :disabled="operationType !== 'add'"></el-input>
+        </el-form-item>
+        <el-form-item label="种类" prop="type">
+          <el-input v-model="goods.type" :disabled="operationType !== 'add'"></el-input>
+        </el-form-item>
+        <el-form-item required label="仓库" v-show="operationType !== 'output'">
+          <el-select v-model="goods.house" placeholder="请选择仓库" :disabled="operationType == 'input'">
+            <el-option
+              v-for="item in thouse"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="供应商" v-show="operationType == 'input'">
+          <el-select v-model="goods.supplier" placeholder="请选择供应商,可不选">
+            <el-option
+              v-for="item in supplier"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="客户" v-show="operationType == 'output'">
+          <el-input v-model="goods.kh" placeholder="客户名，可不填"></el-input>
+        </el-form-item>
+        <el-form-item label="数量" prop="num" v-show="operationType !== 'add'">
+          <el-input v-model="goods.num" min=1 :max="max" type="number"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit('ruleForm')">确定</el-button>
+          <el-button @click="close">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </Model>
+
+    <Table :data="tableData" :header="header" @operation="operation" />
     <el-pagination
       @current-change="handleCurrentChange"
       :page-size="size"
@@ -17,9 +56,22 @@
 
 <script>
 import Table from "@/components/Table.vue";
+import Model from "@/components/Model.vue";
+import {
+  creatInput,
+  creatOutput,
+  creatStock,
+  deleteStock,
+  getStock,
+  getAllHouse,
+  getAllSupplier,
+  zhStock
+} from "@/request/api";
+
 export default {
   components: {
-    Table
+    Table,
+    Model
   },
   props: {},
   data() {
@@ -27,55 +79,208 @@ export default {
       page: 1,
       size: 15,
       count: 0,
-      tableData: [
-        {
-          id: "555",
-          category: "水果",
-          name: "苹果",
-          num: "100"
-        }
-      ],
+      showModel: false,
+      operationType: "add",
+      max: 1000,
+      types: new Map([
+        ["add", "创建商品"],
+        ["input", "商品入库"],
+        ["output", "商品出库"],
+        ["change", "商品调度"]
+      ]),
+      house: [],
+      thouse: [],
+      supplier: [],
+      goods: {
+        name: " ",
+        type: " ",
+        house: " ",
+        supplier: null,
+        num: 0,
+        kh: ""
+      },
+      rules: {
+        name: [{ required: true, message: "请输入商品名", trigger: "change" }]
+      },
+      tableData: [],
       header: [
         {
-          prop: "id",
-          label: "ID",
-          width: "170"
-        },
-        {
-          prop: "category",
-          label: "商品类别",
-          width: "170"
-        },
-        {
           prop: "name",
-          label: "商品名称",
-          width: "170"
+          label: "商品名称"
+        },
+        {
+          prop: "type",
+          label: "商品属性"
         },
         {
           prop: "num",
           label: "库存数量"
+        },
+        {
+          prop: "house",
+          label: "仓库"
+        },
+        {
+          prop: "operation",
+          if: ["permissions", "超级管理员"],
+          list: [
+            {
+              type: "input",
+              name: "入库",
+              btnType: "primary"
+            },
+            {
+              type: "output",
+              name: "出库",
+              btnType: "primary"
+            },
+            {
+              type: "change",
+              name: "转仓",
+              btnType: "primary"
+            },
+            {
+              type: "delete",
+              name: "删除",
+              icon: "el-icon-delete"
+            }
+          ],
+          width: 350
         }
       ]
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.getData();
+    getAllHouse().then(res => {
+      this.house = res.data;
+    });
+    getAllSupplier().then(res => {
+      this.supplier = res.data;
+    });
+  },
   methods: {
     handleCurrentChange(val) {
       console.log(val);
     },
-    input() {
-      console.log("rk");
+    create(data) {
+      this.goods = { ...data, supplier: " " } || {
+        name: " ",
+        type: " ",
+        house: " ",
+        supplier: null,
+        num: 0
+      };
+      this.goods.operator = this.$store.state.userinfo.username;
+      this.goods.client = this.goods.client ? this.goods.client : " ";
+      this.thouse = JSON.parse(JSON.stringify(this.house));
+      if (this.operationType === "change") {
+        this.thouse = this.thouse.filter(item => {
+          return item.name != this.goods.house;
+        });
+        this.goods.house = "";
+      }
+      this.showModel = true;
     },
-    output() {
-      console.log("ck");
+    getData() {
+      getStock({
+        offset: this.page,
+        limit: this.size
+      }).then(res => {
+        this.tableData = res.data;
+      });
     },
-    tohouse() {
-      console.log("tt");
+    close() {
+      this.showModel = false;
+      setTimeout(() => {
+        this.operationType = "add";
+      }, 0);
+    },
+    onSubmit(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          switch (this.operationType) {
+            case "add":
+              creatStock(this.goods).then(() => {
+                this.getData();
+                this.close();
+              });
+              break;
+            case "input":
+              creatInput(this.goods).then(() => {
+                this.getData();
+                this.close();
+              });
+              break;
+            case "output":
+              creatOutput(this.goods).then(() => {
+                this.getData();
+                this.close();
+              });
+              break;
+            case "change":
+              zhStock(this.goods).then(async (res) => {
+                await creatOutput(this.goods);
+                let b = JSON.parse(JSON.stringify(this.goods));
+                await creatInput(Object.assign(b,{id: res.data.id}));
+                this.getData();
+                this.close();
+              });
+              break;
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    operation(type, row) {
+      switch (type) {
+        case "delete":
+          this.delete(row);
+          break;
+        case "input":
+          this.operationType = "input";
+          this.create(row);
+          break;
+        case "output":
+          this.operationType = "output";
+          this.max = row.num;
+          this.create(row);
+          break;
+        case "change":
+          this.operationType = "change";
+          this.max = row.num;
+          this.create(row);
+          break;
+      }
+    },
+    delete(row) {
+      this.$confirm("确定删除此商品?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          deleteStock({ id: row.id }).then(res => {
+            if (res.code == 200) {
+              this.getData();
+            } else {
+              console.log(res.msg);
+            }
+          });
+        })
+        .catch(() => {});
     }
   },
   computed: {},
-  watch: {}
+  watch: {
+    "goods.num"(v) {
+      v < 0 ? this.goods.num = 0 : null;
+      v > this.max ? this.goods.num = this.max : null;
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
