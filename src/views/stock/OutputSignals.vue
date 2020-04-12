@@ -37,7 +37,7 @@ export default {
       header: [
         {
           prop: "createdAt",
-          label: "入库时间",
+          label: "出库时间",
           width: "170"
         },
         {

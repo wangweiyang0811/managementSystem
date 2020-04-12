@@ -143,3 +143,11 @@ export function getStock(data) {
     params: data
   });
 }
+
+
+
+export async function sevenDay(){
+  let a = await axios.get("/api/output/seven");
+  let b = await axios.get("/api/input/seven");
+  return [a.data.num, b.data.num];
+}

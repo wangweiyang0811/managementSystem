@@ -16,6 +16,7 @@
 </template>
 
 <script>
+// import {sevenDay} from "@/request/api";
 export default {
   data() {
     return {};
@@ -26,6 +27,9 @@ export default {
     this.drawChart2();
     this.drawChart3();
     this.drawChart4();
+    // sevenDay().then(res => {
+    //   console.log(res)
+    // })
   },
   methods: {
     drawChart1() {
