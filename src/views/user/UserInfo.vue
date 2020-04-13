@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" @click="addUser">添加用户</el-button>
+      <el-button type="primary" @click="addUser" v-if="$store.state.userinfo.permissions === '超级管理员'">添加用户</el-button>
     </el-row>
     <Model :visible="showModel" @close="close" title="添加用户">
       <el-form ref="ruleForm" :model="user" :rules="rules" label-width="80px" show-message>
