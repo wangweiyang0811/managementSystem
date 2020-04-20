@@ -1,5 +1,26 @@
 import Home from "@/views/Home.vue";
-const stockRouter = [{
+const stockRouter = [
+  
+  {
+    path: "/stock2",
+    component: Home,
+    redirect: "noRedirect",
+    name: "Input2",
+    meta: {
+      title: "库存管理",
+      icon: "el-icon-menu"
+    },
+    children: [{
+      path: "/stock",
+      component: () => import("@/views/stock/Stock.vue"),
+      name: "Stock",
+      meta: {
+        title: "库存信息",
+        icon: "el-icon-menu",
+        keepAlive: true
+      }
+    }]
+  },{
     path: "/stock0",
     component: Home,
     redirect: "noRedirect",
@@ -34,25 +55,6 @@ const stockRouter = [{
       name: "OutputSignals",
       meta: {
         title: "出库信息",
-        icon: "el-icon-menu",
-        keepAlive: true
-      }
-    }]
-  }, {
-    path: "/stock2",
-    component: Home,
-    redirect: "noRedirect",
-    name: "Input2",
-    meta: {
-      title: "库存管理",
-      icon: "el-icon-menu"
-    },
-    children: [{
-      path: "/stock",
-      component: () => import("@/views/stock/Stock.vue"),
-      name: "Stock",
-      meta: {
-        title: "库存信息",
         icon: "el-icon-menu",
         keepAlive: true
       }

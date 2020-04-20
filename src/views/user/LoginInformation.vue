@@ -61,7 +61,9 @@ export default {
       this.loading = true;
       let res = await getLoginInfo({
         limit: this.size,
-        offset: this.page
+        offset: this.page,
+        name: this.$store.state.userinfo.username,
+        permissions: this.$store.state.userinfo.permissions == "超级管理员" ? true : false
       });
       this.tableData = res.data;
       this.count = res.count;

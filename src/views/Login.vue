@@ -1,27 +1,31 @@
 <template>
   <div class="login-page" @keyup.enter="login">
-    <div class="login-box">
-      <h3>库存管理系统</h3>
-      <el-input
-        placeholder="用户名"
-        v-model="userName.value"
-        @input="userNameChange"
-        size="medium"
-        autofocus="true"
-        ref="myInput"
-        :suffix-icon="userNameUseable"
-        title="用户名格式为数字、字母下、划线，5到12位"
-      ></el-input>
-      <el-input
-        placeholder="密码"
-        v-model="passWord.value"
-        @input="passWordChange"
-        size="medium"
-        type="password"
-        :suffix-icon="passWordUseable"
-        title="密码格式为数字、字母、下划线，5到12位"
-      ></el-input>
-      <el-button @click="login" :disabled="disabled" type="primary" title="登录">登录</el-button>
+    <div class="box">
+      <div class="login-box">
+        <h3>库存管理系统</h3>
+      </div>
+      <div class="login-box">
+        <el-input
+          placeholder="用户名"
+          v-model="userName.value"
+          @input="userNameChange"
+          size="medium"
+          autofocus="true"
+          ref="myInput"
+          :suffix-icon="userNameUseable"
+          title="用户名格式为数字、字母下、划线，5到12位"
+        ></el-input>
+        <el-input
+          placeholder="密码"
+          v-model="passWord.value"
+          @input="passWordChange"
+          size="medium"
+          type="password"
+          :suffix-icon="passWordUseable"
+          title="密码格式为数字、字母、下划线，5到12位"
+        ></el-input>
+        <el-button @click="login" :disabled="disabled" type="primary" title="登录">登录</el-button>
+      </div>
     </div>
   </div>
 </template>
@@ -114,32 +118,41 @@ export default {
   display: flex;
   justify-content: center;
   align-content: center;
+  flex-wrap: wrap;
   background: url("/img/login-bg.jpg") no-repeat center center;
   background-size: cover;
-  .login-box {
-    width: 400px;
-    padding: 15px 0px;
-    box-sizing: border-box;
-    margin: auto;
-    background: rgba(255, 255, 255, 0.1);
-    h3 {
-      text-align: center;
-      font-size: 28px;
-      padding: 0;
-      margin: 15px 0 30px 0;
-      color: #ddd;
-    }
-    .el-input {
-      width: 250px;
-      height: 40px;
-      display: block;
-      margin: 10px auto;
-    }
-    .el-button {
-      display: block;
-      margin: 0 auto;
-      color: #fff;
-      font-size: 16px;
+  .box {
+    width: 600px;
+    display: flex;
+    height: 200px;
+    .login-box {
+      width: 300px;
+      padding: 20px 0px;
+      box-sizing: border-box;
+      height: 100%;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.1);
+      h3 {
+        text-align: center;
+        font-size: 28px;
+        line-height: 160px;
+        padding: 0;
+        margin: 0;
+        color: #ddd;
+      }
+      .el-input {
+        width: 250px;
+        height: 40px;
+        display: block;
+        margin: 10px auto;
+      }
+      .el-button {
+        display: block;
+        margin: 0 auto;
+        color: #fff;
+        width: 250px;
+        font-size: 16px;
+      }
     }
   }
 }

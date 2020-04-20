@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-button type="primary" @click="create(undefined)">新建商品</el-button>
+      <el-button type="primary" @click="create(undefined)">注册商品</el-button>
     </el-row>
     <Model :visible="showModel" @close="close" :title="types.get(operationType)">
       <el-form ref="ruleForm" :model="goods" :rules="rules" label-width="80px" show-message>
@@ -21,8 +21,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="供应商" v-show="operationType == 'input'">
-          <el-select v-model="goods.supplier" placeholder="请选择供应商,可不选">
+        <el-form-item label="供应商" required v-show="operationType == 'input'">
+          <el-select v-model="goods.supplier"  placeholder="请选择供应商">
             <el-option
               v-for="item in supplier"
               :key="item.id"
@@ -32,7 +32,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="客户" v-show="operationType == 'output'">
-          <el-input v-model="goods.kh" placeholder="客户名，可不填"></el-input>
+          <el-input v-model="goods.kh" required placeholder="客户名"></el-input>
         </el-form-item>
         <el-form-item label="数量" prop="num" v-show="operationType !== 'add'">
           <el-input v-model="goods.num" min=1 :max="max" type="number"></el-input>
@@ -83,7 +83,7 @@ export default {
       operationType: "add",
       max: 1000,
       types: new Map([
-        ["add", "创建商品"],
+        ["add", "注册商品"],
         ["input", "商品入库"],
         ["output", "商品出库"],
         ["change", "商品调度"]
