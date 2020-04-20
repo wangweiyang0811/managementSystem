@@ -34,10 +34,10 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="客户" v-show="operationType == 'output'">
+        <el-form-item label="客户" required v-show="operationType == 'output'">
           <el-input v-model="goods.client" placeholder="客户名"></el-input>
         </el-form-item>
-        <el-form-item label="数量" prop="num" v-show="operationType !== 'add'">
+        <el-form-item label="数量" required prop="num" v-show="operationType !== 'add'">
           <el-input v-model="goods.num" min=1 :max="max" type="number"></el-input>
         </el-form-item>
         <el-form-item>
