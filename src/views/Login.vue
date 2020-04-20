@@ -121,6 +121,7 @@ export default {
   flex-wrap: wrap;
   background: url("/img/login-bg.jpg") no-repeat center center;
   background-size: cover;
+  // filter: ;
   .box {
     width: 600px;
     display: flex;
@@ -131,14 +132,14 @@ export default {
       box-sizing: border-box;
       height: 100%;
       margin: auto;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.4);
       h3 {
         text-align: center;
         font-size: 28px;
         line-height: 160px;
         padding: 0;
         margin: 0;
-        color: #ddd;
+        color: #fff;
       }
       .el-input {
         width: 250px;
