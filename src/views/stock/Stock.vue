@@ -226,10 +226,8 @@ export default {
               });
               break;
             case "change":
-              this.goods.client = this.goods.house;
-              // this.goods.house = this.h;
-              zhStock({...this.goods, house:this.h}).then(async res => {
-                await creatOutput(this.goods);
+              zhStock(this.goods).then(async res => {
+                await creatOutput({ ...this.goods, client: this.h });
                 let b = JSON.parse(JSON.stringify(this.goods));
                 await creatInput(Object.assign(b, { id: res.data.id }));
                 this.getData();
