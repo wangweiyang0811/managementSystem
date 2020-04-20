@@ -16,16 +16,11 @@
         </el-form-item>
         <el-form-item required label="仓库" v-show="operationType !== 'output'">
           <el-select v-model="goods.house" placeholder="请选择仓库" :disabled="operationType == 'input'">
-            <el-option
-              v-for="item in thouse"
-              :key="item.id"
-              :label="item.name"
-              :value="item.name"
-            ></el-option>
+            <el-option v-for="item in thouse" :key="item.id" :label="item.name" :value="item.name"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="供应商" required v-show="operationType == 'input'">
-          <el-select v-model="goods.supplier"  placeholder="请选择供应商">
+          <el-select v-model="goods.supplier" placeholder="请选择供应商">
             <el-option
               v-for="item in supplier"
               :key="item.id"
@@ -38,7 +33,7 @@
           <el-input v-model="goods.client" placeholder="客户名"></el-input>
         </el-form-item>
         <el-form-item label="数量" required prop="num" v-show="operationType !== 'add'">
-          <el-input v-model="goods.num" min=1 :max="max" type="number"></el-input>
+          <el-input v-model="goods.num" min="1" :max="max" type="number"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('ruleForm')">确定</el-button>
@@ -91,7 +86,7 @@ export default {
         ["output", "商品出库"],
         ["change", "商品调度"]
       ]),
-      house: [],
+      house: " ",
       thouse: [],
       supplier: [],
       goods: {
@@ -190,6 +185,7 @@ export default {
         });
         this.goods.house = "";
       }
+      this.house = data.house;
       this.showModel = true;
     },
     getData() {
@@ -229,10 +225,12 @@ export default {
               });
               break;
             case "change":
-              zhStock(this.goods).then(async (res) => {
+              this.goods.client = this.goods.house;
+              this.goods.house = this.house;
+              zhStock(this.goods).then(async res => {
                 await creatOutput(this.goods);
                 let b = JSON.parse(JSON.stringify(this.goods));
-                await creatInput(Object.assign(b,{id: res.data.id}));
+                await creatInput(Object.assign(b, { id: res.data.id }));
                 this.getData();
                 this.close();
               });
@@ -286,11 +284,9 @@ export default {
   computed: {},
   watch: {
     "goods.num"(v) {
-      v < 0 ? this.goods.num = 0 : null;
-      v > this.max ? this.goods.num = this.max : null;
+      v < 0 ? (this.goods.num = 0) : null;
+      v > this.max ? (this.goods.num = this.max) : null;
     }
   }
 };
 </script>
-<style lang="scss" scoped>
-</style>

@@ -57,7 +57,7 @@ export default {
         },
         {
           prop: "num",
-          label: "数量",
+          label: "出库数量",
           width: "170"
         },
         {
