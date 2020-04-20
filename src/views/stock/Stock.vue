@@ -8,8 +8,11 @@
         <el-form-item label="商品名" required prop="name">
           <el-input v-model="goods.name" :disabled="operationType !== 'add'"></el-input>
         </el-form-item>
-        <el-form-item label="种类" prop="type">
+        <el-form-item label="种类" required prop="type">
           <el-input v-model="goods.type" :disabled="operationType !== 'add'"></el-input>
+        </el-form-item>
+        <el-form-item label="尺寸" required prop="size">
+          <el-input v-model="goods.size" :disabled="operationType !== 'add'"></el-input>
         </el-form-item>
         <el-form-item required label="仓库" v-show="operationType !== 'output'">
           <el-select v-model="goods.house" placeholder="请选择仓库" :disabled="operationType == 'input'">
@@ -32,7 +35,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="客户" v-show="operationType == 'output'">
-          <el-input v-model="goods.kh" required placeholder="客户名"></el-input>
+          <el-input v-model="goods.client" placeholder="客户名"></el-input>
         </el-form-item>
         <el-form-item label="数量" prop="num" v-show="operationType !== 'add'">
           <el-input v-model="goods.num" min=1 :max="max" type="number"></el-input>
@@ -94,10 +97,11 @@ export default {
       goods: {
         name: " ",
         type: " ",
+        size: " ",
         house: " ",
         supplier: null,
         num: 0,
-        kh: ""
+        client: " "
       },
       rules: {
         name: [{ required: true, message: "请输入商品名", trigger: "change" }]
@@ -110,7 +114,7 @@ export default {
         },
         {
           prop: "type",
-          label: "颜色"
+          label: "种类"
         },
         {
           prop: "size",
@@ -172,12 +176,13 @@ export default {
       this.goods = { ...data, supplier: " " } || {
         name: " ",
         type: " ",
+        size: " ",
         house: " ",
         supplier: null,
         num: 0
       };
+      this.goods.num = 0;
       this.goods.operator = this.$store.state.userinfo.username;
-      this.goods.client = this.goods.client ? this.goods.client : " ";
       this.thouse = JSON.parse(JSON.stringify(this.house));
       if (this.operationType === "change") {
         this.thouse = this.thouse.filter(item => {

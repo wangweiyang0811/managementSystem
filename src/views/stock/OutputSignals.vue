@@ -47,7 +47,12 @@ export default {
         },
         {
           prop: "type",
-          label: "类型",
+          label: "种类",
+          width: "170"
+        },
+        {
+          prop: "size",
+          label: "尺寸",
           width: "170"
         },
         {
