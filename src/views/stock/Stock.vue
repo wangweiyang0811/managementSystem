@@ -110,7 +110,11 @@ export default {
         },
         {
           prop: "type",
-          label: "商品属性"
+          label: "颜色"
+        },
+        {
+          prop: "size",
+          label: "尺寸"
         },
         {
           prop: "num",
