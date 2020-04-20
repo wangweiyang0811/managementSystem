@@ -86,7 +86,8 @@ export default {
         ["output", "商品出库"],
         ["change", "商品调度"]
       ]),
-      house: " ",
+      house: [],
+      h: " ",
       thouse: [],
       supplier: [],
       goods: {
@@ -183,9 +184,9 @@ export default {
         this.thouse = this.thouse.filter(item => {
           return item.name != this.goods.house;
         });
-        this.goods.house = "";
+        this.goods.house = " ";
       }
-      this.house = data.house;
+      this.h = data ? data.house : "";
       this.showModel = true;
     },
     getData() {
@@ -226,8 +227,8 @@ export default {
               break;
             case "change":
               this.goods.client = this.goods.house;
-              this.goods.house = this.house;
-              zhStock(this.goods).then(async res => {
+              // this.goods.house = this.h;
+              zhStock({...this.goods, house:this.h}).then(async res => {
                 await creatOutput(this.goods);
                 let b = JSON.parse(JSON.stringify(this.goods));
                 await creatInput(Object.assign(b, { id: res.data.id }));
