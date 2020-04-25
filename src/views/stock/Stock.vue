@@ -2,6 +2,14 @@
   <div>
     <el-row>
       <el-button type="primary" @click="create(undefined)">注册商品</el-button>
+      <el-button type="success" @click="getData" v-show="isAll">all</el-button>
+      <el-input placeholder="请输入内容" v-model="selVal">
+        <el-select v-model="select" slot="prepend" placeholder="请选择">
+          <el-option label="商品名" value="name"></el-option>
+          <el-option label="仓库" value="house"></el-option>
+        </el-select>
+        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+      </el-input>
     </el-row>
     <Model :visible="showModel" @close="close" :title="types.get(operationType)">
       <el-form ref="ruleForm" :model="goods" :rules="rules" label-width="80px" show-message>
@@ -63,7 +71,8 @@ import {
   getStock,
   getAllHouse,
   getAllSupplier,
-  zhStock
+  zhStock,
+  searchStock
 } from "@/request/api";
 
 export default {
@@ -74,8 +83,11 @@ export default {
   props: {},
   data() {
     return {
+      selVal: "",
+      select: "name",
       page: 1,
       size: 15,
+      isAll: false,
       count: 0,
       showModel: false,
       operationType: "add",
@@ -166,7 +178,15 @@ export default {
   },
   methods: {
     handleCurrentChange(val) {
-      console.log(val);
+      this.page = val;
+      if (this.isAll){
+        this.getType();
+      } else {
+        this.getData();
+      }
+    },
+    search() {
+      this.getType();
     },
     create(data) {
       this.goods = { ...data, supplier: " " } || {
@@ -194,8 +214,20 @@ export default {
         offset: this.page,
         limit: this.size
       }).then(res => {
+        this.isAll = false;
         this.tableData = res.data;
       });
+    },
+    getType() {
+      searchStock({
+        key: this.select,
+        val: this.selVal,
+        offset: this.page,
+        limit: this.size
+      }).then(res => {
+        this.isAll = true;
+        this.tableData = res.data;
+      })
     },
     close() {
       this.showModel = false;

@@ -16,104 +16,129 @@
 </template>
 
 <script>
-// import {sevenDay} from "@/request/api";
+import { inputSevenDay, outputSevenDay, stockNum } from "@/request/api";
 export default {
   data() {
     return {};
   },
   created() {},
   mounted() {
-    this.drawChart1();
-    this.drawChart2();
-    this.drawChart3();
-    this.drawChart4();
-    // sevenDay().then(res => {
-    //   console.log(res)
-    // })
+    inputSevenDay().then(res => {
+      this.drawChart1(res.data);
+    });
+    outputSevenDay().then(res => {
+      this.drawChart2(res.data);
+    });
+    stockNum().then(res => {
+      let d = res.data.map(el => {
+        return {
+          name: el.name,
+          value: el.count
+        };
+      });
+      this.drawChart3(d);
+      // this.drawChart4(d);
+    });
   },
   methods: {
-    drawChart1() {
+    drawChart1(data) {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("chart1"));
       // 指定图表的配置项和数据
       let option = {
         title: {
-          text: "货物销量"
-        },
-        tooltip: {},
-        legend: {
-          data: ["销量"]
-        },
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-        },
-        yAxis: {},
-        series: [
-          {
-            name: "销量",
-            type: "bar",
-            data: [5, 20, 26, 10, 10, 20]
-          }
-        ]
-      };
-      myChart.setOption(option);
-    },
-    drawChart2() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById("chart2"));
-      // 指定图表的配置项和数据
-      let option = {
-        title: {
-          text: "每个月出货比例"
+          text: "近七天入库频率"
         },
         xAxis: {
           type: "category",
-          data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+          data: Object.keys(data).map(str => str.substr(5))
         },
         yAxis: {
           type: "value"
         },
         series: [
           {
-            data: [820, 932, 901, 934, 1290, 1330, 1320],
+            data: Object.values(data),
             type: "line"
           }
         ]
       };
       myChart.setOption(option);
     },
-    drawChart3() {
+    drawChart2(data) {
+      // 基于准备好的dom，初始化echarts实例
+      let myChart = this.$echarts.init(document.getElementById("chart2"));
+      // 指定图表的配置项和数据
+      let option = {
+        title: {
+          text: "近七天出库频率"
+        },
+        xAxis: {
+          type: "category",
+          data: Object.keys(data).map(str => str.substr(5))
+        },
+        yAxis: {
+          type: "value"
+        },
+        series: [
+          {
+            data: Object.values(data),
+            type: "line"
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    drawChart3(data) {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("chart3"));
       // 指定图表的配置项和数据
       let option = {
         title: {
-          text: "某站点用户访问来源",
-          subtext: "纯属虚构",
+          text: "库存数量"
+        },
+        tooltip: {},
+        legend: {
+          data: ["库存"]
+        },
+        xAxis: {
+          data: data.map(el => el.name)
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "数量",
+            type: "bar",
+            data: data.map(el => el.value)
+          }
+        ]
+      };
+      myChart.setOption(option);
+    },
+    drawChart4(data) {
+      let myChart = this.$echarts.init(document.getElementById("chart4"));
+      // 指定图表的配置项和数据
+      let option = {
+        title: {
+          text: "库存数量",
           left: "center"
         },
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
+          formatter: "{a} <br/>{b} : {c} "
         },
         legend: {
           orient: "vertical",
           left: "left",
-          data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+          data: data.map(el => el.name)
         },
         series: [
           {
-            name: "访问来源",
+            name: "商品种类",
             type: "pie",
             radius: "55%",
             center: ["50%", "60%"],
-            data: [
-              { value: 335, name: "直接访问" },
-              { value: 310, name: "邮件营销" },
-              { value: 234, name: "联盟广告" },
-              { value: 135, name: "视频广告" },
-              { value: 1548, name: "搜索引擎" }
-            ],
+            data,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -121,35 +146,6 @@ export default {
                 shadowColor: "rgba(0, 0, 0, 0.5)"
               }
             }
-          }
-        ]
-      };
-      myChart.setOption(option);
-    },
-    drawChart4() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById("chart4"));
-      // 指定图表的配置项和数据
-      let option = {
-        xAxis: {},
-        yAxis: {},
-        series: [
-          {
-            symbolSize: 20,
-            data: [
-              [10.0, 8.04],
-              [8.0, 6.95],
-              [13.0, 7.58],
-              [9.0, 8.81],
-              [11.0, 8.33],
-              [14.0, 9.96],
-              [6.0, 7.24],
-              [4.0, 4.26],
-              [12.0, 10.84],
-              [7.0, 4.82],
-              [5.0, 5.68]
-            ],
-            type: "scatter"
           }
         ]
       };

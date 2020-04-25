@@ -138,16 +138,24 @@ export function deleteStock(data) {
     params: data
   });
 }
+export function searchStock(data) {
+  return axios.get("/api/stock/type", {
+    params: data
+  });
+}
 export function getStock(data) {
   return axios.get("/api/stock", {
     params: data
   });
 }
 
+export function stockNum() {
+  return axios.get("/api/stock/num");
+}
 
-
-export async function sevenDay(){
-  let a = await axios.get("/api/output/seven");
-  let b = await axios.get("/api/input/seven");
-  return [a.data.num, b.data.num];
+export function inputSevenDay() {
+  return axios.get("/api/input/seven");
+}
+export async function outputSevenDay() {
+  return axios.get("/api/output/seven");
 }

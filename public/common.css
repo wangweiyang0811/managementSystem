@@ -61,3 +61,10 @@ html {
 #app .el-dialog {
     width: 600px;
 }
+#app .el-input-group{
+    width: 400px;
+    margin-left: 10px;
+}
+#app .el-select .el-input {
+    width: 90px;
+}

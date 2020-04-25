@@ -100,7 +100,7 @@ export default {
   created() {},
   mounted() {
     this.getInfo();
-    if(this.$store.state.userinfo.permissions === "管理员"){
+    if (this.$store.state.userinfo.permissions === "管理员") {
       this.header.pop();
     }
   },

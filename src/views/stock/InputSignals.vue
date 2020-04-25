@@ -73,7 +73,8 @@ export default {
   },
   methods: {
     handleCurrentChange(val) {
-      console.log(val);
+      this.page = val;
+      this.getData();
     },
     getData() {
       getInput({

@@ -18,7 +18,7 @@
           </el-dropdown>
         </el-header>
         <el-main>
-          <div id="pageTitle">{{ $store.state.pageTitle }}</div>
+          <div id="pageTitle" v-show="$store.state.pageTitle !== '首页'">{{ $store.state.pageTitle }}</div>
           <transition name="slide-fade">
             <!-- <keep-alive> -->
             <!-- <router-view v-if="$route.meta.keepAlive" /> -->
@@ -94,6 +94,9 @@ export default {
 }
 .el-icon-arrow-down {
   font-size: 15px;
+}
+.el-main{
+  overflow: hidden;
 }
 #pageTitle{
   height: 40px;
