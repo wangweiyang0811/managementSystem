@@ -1,5 +1,17 @@
 <template>
-  <div>
+  <div id="inp">
+    <el-input placeholder="商品名" v-model="input.name" class="input-with-select">
+      <el-select v-model="input.day" slot="prepend" @change="inputChange" placeholder="请选择">
+        <el-option
+          v-for="item in sel"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </el-input>
+    <el-button slot="append" @click="inputChange(input.day)" icon="el-icon-search"></el-button>
+    <el-button type="success" @click="getData" v-show="all">all</el-button>
     <Table :data="tableData" :header="header" />
     <el-pagination
       @current-change="handleCurrentChange"
@@ -12,7 +24,7 @@
 
 <script>
 import Table from "@/components/Table.vue";
-import { getInput } from "@/request/api";
+import { getInput, getInputByTime } from "@/request/api";
 export default {
   components: {
     Table
@@ -23,6 +35,30 @@ export default {
       page: 1,
       size: 15,
       count: 0,
+      all: false,
+      searchModel: {},
+      sel: [
+        {
+          label: "近七天",
+          value: 7
+        },
+        {
+          label: "近一个月",
+          value: 30
+        },
+        {
+          label: "近三个月",
+          value: 90
+        },
+        {
+          label: "所有",
+          value: "all"
+        }
+      ],
+      input: {
+        day: 7,
+        name: ""
+      },
       tableData: [],
       header: [
         {
@@ -74,9 +110,10 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.page = val;
-      this.getData();
+      this.all ? this.inputChange() : this.getData();
     },
     getData() {
+      this.all = false;
       getInput({
         offset: this.page,
         limit: this.size
@@ -86,6 +123,18 @@ export default {
           this.count = res.count;
         }
       });
+    },
+    inputChange() {
+      let data = { day: this.input.day, offset: this.page, limit: this.size };
+      if (this.input.name && this.input.name.trim()) {
+        data.name = this.input.name;
+      }
+      this.all = true;
+      getInputByTime(data).then(res => {
+        console.log(res)
+        this.tableData = res.data;
+        this.count = res.count;
+      })
     }
   },
   computed: {},

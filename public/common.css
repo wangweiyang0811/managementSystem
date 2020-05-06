@@ -62,9 +62,41 @@ html {
     width: 600px;
 }
 #app .el-input-group{
-    width: 400px;
-    margin-left: 10px;
+    width: 160px;
 }
-#app .el-select .el-input {
+#app .el-input-group__prepend {
+    width: 40px;
+    padding: 0 5px;
+    text-align: center;
+}
+
+#app .el-input__inner {
+    padding: 0 5px;
+}
+#app #chart .el-input__inner {
+    padding: 0 5px;
     width: 90px;
+}
+#app #chart .el-input-group__prepend .el-select{
+    margin: -10px 0px;
+}
+
+#app #inp .el-input__inner {
+    padding: 0 5px;
+    width: 90px;
+}
+
+
+#app #inp .el-input-group__prepend .el-select{
+    margin: -10px 0px;
+}
+
+#app #out .el-input__inner {
+    padding: 0 5px;
+    width: 90px;
+}
+
+
+#app #out .el-input-group__prepend .el-select{
+    margin: -10px 0px;
 }

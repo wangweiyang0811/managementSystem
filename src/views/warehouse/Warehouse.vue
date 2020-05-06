@@ -3,6 +3,11 @@
     <el-row>
       <el-button type="primary" @click="addHouse">添加仓库</el-button>
     </el-row>
+    <el-input placeholder="请输入仓库名" v-model="name">
+      <template slot="prepend">搜索</template>
+    </el-input>
+    <el-button icon="el-icon-search" v-show="isSearch" @click="search"></el-button>
+    <el-button type="success" @click="getDate" v-show="all">all</el-button>
     <Model :visible="showModel" @close="close" title="添加仓库">
       <el-form ref="ruleForm" :model="house" :rules="rules" label-width="80px" show-message>
         <el-form-item label="仓库名" required prop="name">
@@ -32,7 +37,7 @@
       @current-change="handleCurrentChange"
       :page-size="size"
       layout="total, prev, pager, next, jumper"
-      :total="tableData.length"
+      :total="count"
     ></el-pagination>
   </div>
 </template>
@@ -44,7 +49,8 @@ import {
   getHouse,
   creatHouse,
   getAllUser,
-  deleteHouse
+  deleteHouse,
+  getHouseByName
 } from "@/request/api.js";
 export default {
   components: {
@@ -56,11 +62,15 @@ export default {
       showModel: false,
       size: 15,
       page: 1,
+      count: 0,
+      all: false,
       house: {
         name: "",
         address: "",
         managers: undefined
       },
+      name: "",
+      isSearch: false,
       managersList: [],
       tableData: [],
       header: [
@@ -105,7 +115,7 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.page = val;
-      this.getDate();
+      this.all ? this.search() : this.getDate();
     },
     addHouse() {
       this.showModel = true;
@@ -131,6 +141,13 @@ export default {
         }
       });
     },
+    search() {
+      this.all = true;
+      getHouseByName({ name: this.name }).then(res => {
+        this.tableData = res.data;
+        this.count = res.count;
+      })
+    },
     operation(type, row) {
       this.$confirm("确定删除此仓库?", "提示", {
         confirmButtonText: "确定",
@@ -149,12 +166,14 @@ export default {
         .catch(() => {});
     },
     async getDate() {
+      this.all = false;
       let res = await getHouse({
         limit: this.size,
         offset: this.page
       });
       if (res.code == 200) {
         this.tableData = res.data;
+        this.count = res.count;
       } else {
         console.log("获取仓库数据失败");
       }
@@ -171,7 +190,15 @@ export default {
     }
   },
   computed: {},
-  watch: {}
+  watch: {
+    name(e) {
+      if (e && e.trim().length !== 0) {
+        this.isSearch = true;
+      } else {
+        this.isSearch = false;
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

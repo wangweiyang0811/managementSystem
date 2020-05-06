@@ -2,14 +2,22 @@
   <div>
     <el-row>
       <el-button type="primary" @click="create(undefined)">注册商品</el-button>
-      <el-button type="success" @click="getData" v-show="isAll">all</el-button>
-      <el-input placeholder="请输入内容" v-model="selVal">
-        <el-select v-model="select" slot="prepend" placeholder="请选择">
-          <el-option label="商品名" value="name"></el-option>
-          <el-option label="仓库" value="house"></el-option>
-        </el-select>
-        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+    </el-row>
+    <el-row>
+      <el-input placeholder="请输入商品" v-model="searchModel.name">
+        <template slot="prepend">商品名</template>
       </el-input>
+      <el-input placeholder="请输入种类" v-model="searchModel.type">
+        <template slot="prepend">种类</template>
+      </el-input>
+      <el-input placeholder="请输入尺寸" v-model="searchModel.size">
+        <template slot="prepend">尺寸</template>
+      </el-input>
+      <el-input placeholder="请输入仓库" v-model="searchModel.house">
+        <template slot="prepend">仓库</template>
+      </el-input>
+      <el-button icon="el-icon-search" @click="search"></el-button>
+      <el-button type="success" @click="getData" v-show="isAll">all</el-button>
     </el-row>
     <Model :visible="showModel" @close="close" :title="types.get(operationType)">
       <el-form ref="ruleForm" :model="goods" :rules="rules" label-width="80px" show-message>
@@ -83,7 +91,7 @@ export default {
   props: {},
   data() {
     return {
-      selVal: "",
+      searchModel: {},
       select: "name",
       page: 1,
       size: 15,
@@ -186,7 +194,16 @@ export default {
       }
     },
     search() {
-      this.getType();
+      let model = {};
+      for (let val in this.searchModel) {
+        this.searchModel[val].trim() ?
+        model[val] = this.searchModel[val].trim() :
+        undefined;
+      }
+      if (Object.keys(model).length === 0) {
+        return;
+      }
+      this.getType(model);
     },
     create(data) {
       this.goods = { ...data, supplier: " " } || {
@@ -218,16 +235,15 @@ export default {
         this.tableData = res.data;
       });
     },
-    getType() {
+    getType(model) {
       searchStock({
-        key: this.select,
-        val: this.selVal,
+        model,
         offset: this.page,
         limit: this.size
       }).then(res => {
         this.isAll = true;
         this.tableData = res.data;
-      })
+      });
     },
     close() {
       this.showModel = false;

@@ -37,6 +37,9 @@ export function deleteUser(data) {
     params: data
   });
 }
+
+
+
 export function getUser(data) {
   return axios.get("/api/user", {
     params: data
@@ -57,6 +60,17 @@ export function getLoginInfo(data) {
     params: data
   });
 }
+export function loginStep(data) {
+  return axios.get("/api/loginInfo/login", {
+    params: data
+  });
+}
+export function getLoginByUsername(data) {
+  return axios.get("/api/loginInfo/name", {
+    params: data
+  });
+}
+
 // warehouseinfo
 export function creatHouse(data) {
   return axios.post("/api/house", data);
@@ -71,6 +85,11 @@ export function getHouse(data) {
     params: data
   });
 }
+export function getHouseByName(data) {
+  return axios.get("/api/house/name", {
+    params: data
+  });
+}
 export function getAllHouse() {
   return axios.get("/api/house/all");
 }
@@ -81,6 +100,11 @@ export function creatSupplier(data) {
 }
 export function deleteSupplier(data) {
   return axios.delete("/api/supplier", {
+    params: data
+  });
+}
+export function getSupplierByName(data) {
+  return axios.get("/api/supplier/name", {
     params: data
   });
 }
@@ -111,6 +135,11 @@ export function getInput(data) {
     params: data
   });
 }
+export function getInputByTime(data) {
+  return axios.get("/api/input/time", {
+    params: data
+  });
+}
 
 // output
 export function creatOutput(data) {
@@ -123,6 +152,11 @@ export function deleteOutput(data) {
 }
 export function getOutput(data) {
   return axios.get("/api/output", {
+    params: data
+  });
+}
+export function getOutputByTime(data) {
+  return axios.get("/api/output/time", {
     params: data
   });
 }
@@ -149,13 +183,19 @@ export function getStock(data) {
   });
 }
 
-export function stockNum() {
-  return axios.get("/api/stock/num");
+export function stockNum(data) {
+  return axios.get("/api/stock/num", {
+    params: data
+  });
 }
 
-export function inputSevenDay() {
-  return axios.get("/api/input/seven");
+export function inputSevenDay(data) {
+  return axios.get("/api/input/seven", {
+    params: data
+  });
 }
-export async function outputSevenDay() {
-  return axios.get("/api/output/seven");
+export async function outputSevenDay(data) {
+  return axios.get("/api/output/seven", {
+    params: data
+  });
 }

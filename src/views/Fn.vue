@@ -1,6 +1,6 @@
 <template>
   <div id="fn">
-    <h1>库存管理系统</h1>
+    <div id="pageTitle">{{ $store.state.pageTitle }}<span class="hy">欢迎使用库存管理系统</span></div>
   </div>
 </template>
 
@@ -17,24 +17,34 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#fn {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: auto;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  background: {
-    image: linear-gradient(45deg,rgba(255, 0, 212, 0.692), rgba(255, 255, 255, 0.568), rgba(0, 132, 255, 0.8))
+@keyframes hue {
+  0% {
+      background-position:0 0;
   }
-  margin: -20px;
-  h1{
-    color: #fff;
-    font-size: 5vw;
-    margin-top: -10vh;
-    text-shadow: 5px 5px 1px #000, 4px 4px 1px #000, 3px 3px 1px #000;
+  100% {
+      background-position:-250px 0;
+  }
+}
+#fn {
+  #pageTitle{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 30px;
+    border-radius: 10px;
+    color: #666;
+    font-weight: 600;
+    box-shadow: 0 2px 6px 0 #d2d2d2;
+    margin-bottom: 20px;
+    .hy{
+      margin-left: 30px;
+      font-size: 25px;
+      background: {
+        image: linear-gradient(90deg,rgba(255, 0, 212, 0.692), rgba(36, 248, 36, 0.568), rgba(0, 132, 255, 0.8), rgba(255, 0, 212, 0.692));
+      }
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: hue 1.5s infinite linear;
+    }
   }
 }
 </style>

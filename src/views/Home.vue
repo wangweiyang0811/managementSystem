@@ -16,6 +16,7 @@
               <el-dropdown-item command="logOut">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
+          <div id="day" title="当前时间">{{ date }}</div>
         </el-header>
         <el-main>
           <div id="pageTitle" v-show="$store.state.pageTitle !== '首页'">{{ $store.state.pageTitle }}</div>
@@ -32,7 +33,9 @@
 </template>
 
 <script>
+let timer;
 import Sidebar from "@/components/sidebar/Sidebar.vue";
+import moment from "moment";
 export default {
   name: "Home",
   components: {
@@ -40,11 +43,13 @@ export default {
   },
   data() {
     return {
-      routerData: []
+      routerData: [],
+      date: ""
     };
   },
   mounted() {
     this.routerData = this.$router.options.routes;
+    timer = requestAnimationFrame(this.getDate);
   },
   methods: {
     handleCommand(command) {
@@ -54,10 +59,18 @@ export default {
           break;
       }
     },
+    getDate() {
+      // this.date = new Date().toLocaleString();
+      this.date = moment().format("YYYY-MM-DD HH:mm:ss")
+      timer = requestAnimationFrame(this.getDate);
+    },
     logOut() {
       this.$store.dispatch("setUserinfo", { name: null });
       this.$router.push("/login");
     }
+  },
+  destroyed() {
+    cancelAnimationFrame(timer);
   }
 };
 </script>
@@ -91,6 +104,13 @@ export default {
   &:hover {
     filter: brightness(1.5);
   }
+}
+#day {
+  float: right;
+  height: 100%;
+  margin-right: 50px;
+  line-height: 60px;
+  color: #666;
 }
 .el-icon-arrow-down {
   font-size: 15px;

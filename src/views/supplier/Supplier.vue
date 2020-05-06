@@ -3,6 +3,11 @@
     <el-row>
       <el-button type="primary" @click="addSupplier">添加供应商</el-button>
     </el-row>
+    <el-input placeholder="请输入供应商" v-model="name">
+      <template slot="prepend">搜索</template>
+    </el-input>
+    <el-button icon="el-icon-search" v-show="isSearch" @click="search"></el-button>
+    <el-button type="success" @click="getData" v-show="all">all</el-button>
     <Model :visible="showModel" @close="close" :title="edits ? '修改供应商信息' :'添加供应商'">
       <el-form ref="ruleForm" :model="supplier" :rules="rules" label-width="80px" show-message>
         <el-form-item label="商家名" required prop="name">
@@ -42,7 +47,8 @@ import {
   getSupplier,
   creatSupplier,
   deleteSupplier,
-  updateSupplier
+  updateSupplier,
+  getSupplierByName
 } from "@/request/api";
 export default {
   components: {
@@ -57,6 +63,9 @@ export default {
       showModel: false,
       edits: false,
       loading: false,
+      name: "",
+      isSearch: false,
+      all: false,
       supplier: {
         id: "",
         name: "",
@@ -127,7 +136,7 @@ export default {
   methods: {
     handleCurrentChange(val) {
       this.page = val;
-      this.getData();
+      this.all ? this.search() : this.getData();
     },
     operation(type, row) {
       switch (type) {
@@ -177,6 +186,13 @@ export default {
         }
       });
     },
+    search() {
+      this.all = true;
+      getSupplierByName({ name: this.name }).then(res => {
+        this.tableData = res.data;
+        this.count = res.count;
+      });
+    },
     onEdits(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -195,6 +211,7 @@ export default {
       });
     },
     getData() {
+      this.all = false;
       this.loading = true;
       getSupplier({
         offset: this.page,
@@ -238,7 +255,15 @@ export default {
     }
   },
   computed: {},
-  watch: {}
+  watch: {
+    name(e) {
+      if (e && e.trim().length !== 0) {
+        this.isSearch = true;
+      } else {
+        this.isSearch = false;
+      }
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
