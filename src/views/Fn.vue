@@ -26,6 +26,13 @@ export default {
   }
 }
 #fn {
+  background: url("/img/1.jpg") no-repeat center center;
+  background-size: cover;
+  margin: -20px;
+  margin-top: -18px;
+  padding: 20px;
+  padding-top: 18px;
+  height: 100%;
   #pageTitle{
     height: 40px;
     line-height: 40px;
@@ -33,6 +40,8 @@ export default {
     border-radius: 10px;
     color: #666;
     font-weight: 600;
+    background: #fff;
+    
     box-shadow: 0 2px 6px 0 #d2d2d2;
     margin-bottom: 20px;
     .hy{
