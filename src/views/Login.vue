@@ -60,7 +60,16 @@ export default {
           this.$store.dispatch("setUserinfo", res.data);
           this.$store.dispatch("setToken", res.token);
           await this.setLogin();
+          this.$message({
+            message: "登陆成功",
+            type: "success"
+          });
           this.$router.push({ path: "/" });
+        } else {
+          this.$message({
+            message: "用户名或密码错误，请重新输入！",
+            type: "error"
+          });
         }
       }
     },

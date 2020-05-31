@@ -116,7 +116,7 @@ export default {
         size: " ",
         house: " ",
         supplier: null,
-        num: 0,
+        num: 1,
         client: " "
       },
       rules: {
@@ -171,7 +171,8 @@ export default {
           ],
           width: 350
         }
-      ]
+      ],
+      targetData: {}
     };
   },
   created() {},
@@ -212,19 +213,23 @@ export default {
         size: " ",
         house: " ",
         supplier: null,
-        num: 0
+        num: 1
       };
-      this.goods.num = 0;
+      this.goods.num = 1;
       this.goods.operator = this.$store.state.userinfo.username;
       this.thouse = JSON.parse(JSON.stringify(this.house));
       if (this.operationType === "change") {
         this.thouse = this.thouse.filter(item => {
           return item.name != this.goods.house;
         });
-        this.goods.house = " ";
+        this.goods.house = this.thouse[0];
+      }
+      if (this.operationType === "input") {
+        this.goods.supplier = this.supplier[0];
       }
       this.h = data ? data.house : "";
       this.showModel = true;
+      this.targetData = data;
     },
     getData() {
       getStock({
@@ -254,6 +259,13 @@ export default {
     onSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if (this.goods.num < 1 || this.goods.num > 9999) {
+            this.$message({
+              message: "数量超出限制，应处于1 ~ 9999 之间！",
+              type: "error"
+            });
+            return;
+          }
           switch (this.operationType) {
             case "add":
               creatStock(this.goods).then(() => {
@@ -268,12 +280,24 @@ export default {
               });
               break;
             case "output":
+              if (!this.goods.client) {
+                return this.$message({
+                  message: "请填写客户名称！",
+                  type: "error"
+                });
+              }
               creatOutput(this.goods).then(() => {
                 this.getData();
                 this.close();
               });
               break;
             case "change":
+              if (this.targetData.num < this.goods.num) {
+                return this.$message({
+                  message: "超出库存数量，请重新输入！",
+                  type: "error"
+                });
+              }
               zhStock(this.goods).then(async res => {
                 await creatOutput({ ...this.goods, client: this.h });
                 let b = JSON.parse(JSON.stringify(this.goods));
@@ -331,7 +355,7 @@ export default {
   computed: {},
   watch: {
     "goods.num"(v) {
-      v < 0 ? (this.goods.num = 0) : null;
+      v < 0 ? (this.goods.num = 1) : null;
       v > this.max ? (this.goods.num = this.max) : null;
     }
   }
