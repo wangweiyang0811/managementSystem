@@ -49,7 +49,7 @@
           <el-input v-model="goods.client" placeholder="客户名"></el-input>
         </el-form-item>
         <el-form-item label="数量" required prop="num" v-show="operationType !== 'add'">
-          <el-input v-model="goods.num" min="1" :max="max" type="number"></el-input>
+          <el-input v-model="goods.num" min="1" max="9999" type="number"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('ruleForm')">确定</el-button>
@@ -99,7 +99,6 @@ export default {
       count: 0,
       showModel: false,
       operationType: "add",
-      max: 1000,
       types: new Map([
         ["add", "注册商品"],
         ["input", "商品入库"],
@@ -331,12 +330,10 @@ export default {
           break;
         case "output":
           this.operationType = "output";
-          this.max = row.num;
           this.create(row);
           break;
         case "change":
           this.operationType = "change";
-          this.max = row.num;
           this.create(row);
           break;
       }
