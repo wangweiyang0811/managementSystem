@@ -216,16 +216,17 @@ export default {
         num: 1
       };
       this.goods.num = 1;
+      console.log(this.thouse[0])
       this.goods.operator = this.$store.state.userinfo.username;
       this.thouse = JSON.parse(JSON.stringify(this.house));
       if (this.operationType === "change") {
         this.thouse = this.thouse.filter(item => {
           return item.name != this.goods.house;
         });
-        this.goods.house = this.thouse[0];
+        this.goods.house = this.thouse[0].name;
       }
       if (this.operationType === "input") {
-        this.goods.supplier = this.supplier[0];
+        this.goods.supplier = this.supplier[0].name;
       }
       this.h = data ? data.house : "";
       this.showModel = true;
@@ -274,6 +275,7 @@ export default {
               });
               break;
             case "input":
+              console.log(this.goods)
               creatInput(this.goods).then(() => {
                 this.getData();
                 this.close();
