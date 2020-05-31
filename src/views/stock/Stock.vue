@@ -216,7 +216,6 @@ export default {
         num: 1
       };
       this.goods.num = 1;
-      console.log(this.thouse[0])
       this.goods.operator = this.$store.state.userinfo.username;
       this.thouse = JSON.parse(JSON.stringify(this.house));
       if (this.operationType === "change") {
@@ -285,6 +284,12 @@ export default {
               if (!this.goods.client) {
                 return this.$message({
                   message: "请填写客户名称！",
+                  type: "error"
+                });
+              }
+              if (this.targetData.num < this.goods.num) {
+                return this.$message({
+                  message: "超出库存数量，请重新输入！",
                   type: "error"
                 });
               }
@@ -358,7 +363,7 @@ export default {
   watch: {
     "goods.num"(v) {
       v < 0 ? (this.goods.num = 1) : null;
-      v > this.max ? (this.goods.num = this.max) : null;
+      v > 9999 ? (this.goods.num = 9999) : null;
     }
   }
 };
