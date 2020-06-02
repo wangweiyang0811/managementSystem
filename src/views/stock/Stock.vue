@@ -49,7 +49,7 @@
           <el-input v-model="goods.client" placeholder="客户名"></el-input>
         </el-form-item>
         <el-form-item label="数量" required prop="num" v-show="operationType !== 'add'">
-          <el-input v-model="goods.num" min="1" max="9999" type="number"></el-input>
+          <el-input v-model="goods.num" min="0" max="99999999" type="number"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit('ruleForm')">确定</el-button>
@@ -356,12 +356,6 @@ export default {
         .catch(() => {});
     }
   },
-  computed: {},
-  watch: {
-    "goods.num"(v) {
-      v < 0 ? (this.goods.num = 1) : null;
-      v > 9999 ? (this.goods.num = 9999) : null;
-    }
-  }
+  computed: {}
 };
 </script>
